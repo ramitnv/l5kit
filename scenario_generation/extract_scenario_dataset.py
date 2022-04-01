@@ -9,7 +9,7 @@ from visualization_utils import visualize_scene_feat
 
 ####################################################################################
 def process_scenes_data(scene_indices_all, dataset, dataset_zarr, dm, sim_cfg, cfg, min_n_agents, max_n_agents,
-                        min_extent_length,  min_extent_width, verbose=0):
+                        min_extent_length,  min_extent_width, max_distance_map, max_distance_agent, verbose=0):
     """
     Data format documentation: https://github.com/ramitnv/l5kit/blob/master/docs/data_format.rst
     """
@@ -54,6 +54,8 @@ def process_scenes_data(scene_indices_all, dataset, dataset_zarr, dm, sim_cfg, c
         'dim_agent_feat_vec': dim_agent_feat_vec,
         'min_extent_length': min_extent_length,
         'min_extent_width': min_extent_width,
+        'max_distance_map, ':  max_distance_map,
+        'max_distance_agent': max_distance_agent,
     }
 
     map_elems_points = np.zeros((n_scenes_orig, n_polygon_types, max_num_elem, max_points_per_elem, coord_dim),

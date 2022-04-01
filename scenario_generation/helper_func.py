@@ -22,8 +22,14 @@ def is_agent_valid(centroid, speed, extent, dataset_props, map_elems_exists, map
             print(f'Agent {agent_name} discarded, length: {length},'
                   f' width: {width}, min_extent_length: {min_extent_length}, min_extent_width: {min_extent_width}')
         return False
-    polygon_types = dataset_props['polygon_types']
 
+    max_distance_agent = dataset_props['max_distance_agent']
+    dist_to_ego = np.linalg.norm(centroid)
+    if dist_to_ego > max_distance_agent:
+        if verbose:
+            print(f'Agent {agent_name} discarded, dist_to_ego {dist_to_ego} is more than {max_distance_agent}')
+        return False
+    polygon_types = dataset_props['polygon_types']
     lanes_mid_exists = map_elems_exists[ind_scene, polygon_types.index('lanes_mid')]
     lanes_left_exists = map_elems_exists[ind_scene, polygon_types.index('lanes_left')]
     lanes_right_exists = map_elems_exists[ind_scene, polygon_types.index('lanes_right')]
