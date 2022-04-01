@@ -138,14 +138,3 @@ def get_poly_elems(ego_input, poly_type, dataset_props):
     return elems_points, is_points_valid
 
 ####################################################################################
-
-# Debug
-# plt.subplot(311)
-# plt.imshow(ego_input['lanes_availabilities'])
-# plt.subplot(312)
-# plt.imshow(ego_input['lanes'][:, :, 0] != 0.0)
-# plt.subplot(313)
-# plt.imshow(ego_input['lanes'][:, :, 1] != 0.0)
-# # plt.show()
-#
-#
