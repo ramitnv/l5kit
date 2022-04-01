@@ -44,7 +44,7 @@ max_distance_agent = 30   # [m] - we will discard any agents with centroid farth
 # train_data_loader key
 
 ########################################################################
-save_folder = 'AVSG_Data'
+save_folder = 'avsg_data'
 save_dir_path = os.path.join(save_folder, save_dir_name)
 
 if not os.path.exists(save_folder):
