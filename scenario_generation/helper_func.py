@@ -10,29 +10,30 @@ import l5kit.visualization.visualizer.zarr_utils as zarr_utils
 ####################################################################################
 
 def is_agent_valid(centroid, speed, extent, dataset_props, map_elems_exists, map_elems_points, ind_scene, agent_name, verbose):
+    min_extent_length = dataset_props['min_extent_length']
+    min_extent_width = dataset_props['min_extent_width']
+    length, width = extent
+    polygon_types = dataset_props['polygon_types']
+    i_lanes_mid = polygon_types.index('lanes_mid')
+    i_lanes_left = polygon_types.index('lanes_left')
+    i_lanes_right = polygon_types.index('lanes_right')
+    max_distance_agent = dataset_props['max_distance_agent']
+
     if speed < 0:
         if verbose:
             print(f'Agent {agent_name} discarded - negative speed {speed}')
         return False
-    min_extent_length = dataset_props['min_extent_length']
-    min_extent_width = dataset_props['min_extent_width']
-    length, width = extent
     if length < min_extent_length or width < min_extent_width:
         if verbose:
             print(f'Agent {agent_name} discarded, length: {length},'
                   f' width: {width}, min_extent_length: {min_extent_length}, min_extent_width: {min_extent_width}')
         return False
 
-    max_distance_agent = dataset_props['max_distance_agent']
     dist_to_ego = np.linalg.norm(centroid)
     if dist_to_ego > max_distance_agent:
         if verbose:
             print(f'Agent {agent_name} discarded, dist_to_ego {dist_to_ego} is more than {max_distance_agent}')
         return False
-    polygon_types = dataset_props['polygon_types']
-    i_lanes_mid = polygon_types.index('lanes_mid')
-    i_lanes_left = polygon_types.index('lanes_left')
-    i_lanes_right = polygon_types.index('lanes_right')
 
     lanes_mid_exists = map_elems_exists[ind_scene, i_lanes_mid]
     lanes_left_exists = map_elems_exists[ind_scene, i_lanes_left]
@@ -113,7 +114,7 @@ def get_poly_elems(ego_input, poly_type, dataset_props):
     max_num_elem = dataset_props['max_num_elem']
     max_points_per_elem = dataset_props['max_points_per_elem']
     coord_dim = dataset_props['coord_dim']
-
+    max_distance_map = dataset_props['max_distance_map']
     elems_points = np.zeros((max_num_elem, max_points_per_elem, coord_dim), dtype=np.float32)
     is_points_valid = np.zeros((max_num_elem, max_points_per_elem), dtype=np.bool_)
 
@@ -126,6 +127,11 @@ def get_poly_elems(ego_input, poly_type, dataset_props):
     else:
         points = ego_input[poly_type][:, :, :coord_dim]
         points_valid = ego_input[poly_type + '_availabilities'][:, :]
+
+    # disqualify points too far away from ego:
+    dist_to_ego = np.linalg.norm(points, axis=-1)
+    points[dist_to_ego > max_distance_map] = 0.
+    points_valid[dist_to_ego > max_distance_map] = np.False_
 
     elems_points[:points.shape[0], :points.shape[1], :] = points
     is_points_valid[:points_valid.shape[0], :points_valid.shape[1]] = points_valid

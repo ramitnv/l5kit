@@ -54,7 +54,7 @@ def process_scenes_data(scene_indices_all, dataset, dataset_zarr, dm, sim_cfg, c
         'dim_agent_feat_vec': dim_agent_feat_vec,
         'min_extent_length': min_extent_length,
         'min_extent_width': min_extent_width,
-        'max_distance_map, ':  max_distance_map,
+        'max_distance_map':  max_distance_map,
         'max_distance_agent': max_distance_agent,
     }
 

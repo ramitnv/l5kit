@@ -35,7 +35,7 @@ min_n_agents = 2  # we will discard scenes with less valid agents
 min_extent_length = 3  # [m] - discard shorter agents
 min_extent_width = 1  # [m] - discard narrower agents
 max_distance_map = 40   # [m] - we will discard any map points farther than max_distance_map from the ego
-max_distance_agent = 30   # [m] - we will discard any agents with centroid farther than max_distance_map from the ego
+max_distance_agent = 35   # [m] - we will discard any agents with centroid farther than max_distance_map from the ego
 # Our changes to config file:
 # max_retrieval_distance_m: 40  # maximum radius around the AoI for which we retrieve
 # max_agents_distance: 40 # maximum distance from AoI for another agent to be picked
